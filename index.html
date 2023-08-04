@@ -1,0 +1,66 @@
+<html>
+  <head>
+    <title>Vacantion is ending</title>
+    <link rel="stylesheet" href="./flipclock.css" media="screen" />
+    <meta name="viewport" content="width=device-width" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="http://fonts.googleapis.com/css?family=Ubuntu"
+    />
+  </head>
+  <body background="./background.png">
+    <div class="container">
+      <span class="name">FULANO,</span>
+      <span class="frase">Your vacation ends in</span>
+      <image class="picture" src="./fulano.png" />
+      <div class="clock"></div>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.7.0.slim.min.js"
+      integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE="
+      crossorigin="anonymous"
+    ></script>
+    <script src="./flipclock.js"></script>
+    <script type="text/javascript">
+      var clock;
+
+      $(document).ready(function () {
+        var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+        var futureDate = new Date("August 7, 2023 08:00 AM EDT");
+        var currentDate = new Date();
+
+        // Calculate the difference in seconds between the future and current date
+        var diff = futureDate.getTime() / 1000 - currentDate.getTime() / 1000;
+
+        var finalTime = new Date(
+          new Date(diff).toLocaleString("en-US", { timeZone: timezone })
+        ).getTime();
+
+        // Calculate day difference and apply class to .clock for extra digit styling.
+        function dayDiff(first, second) {
+          return (second - first) / (1000 * 60 * 60 * 24);
+        }
+
+        if (dayDiff(currentDate, futureDate) < 100) {
+          $(".clock").addClass("twoDayDigits");
+        } else {
+          $(".clock").addClass("threeDayDigits");
+        }
+
+        if (finalTime < 0) {
+          finalTime = 0;
+        }
+
+        // Instantiate a coutdown FlipClock
+        clock = $(".clock").FlipClock(finalTime, {
+          clockFace: "DailyCounter",
+          countdown: true,
+          language: "english",
+        });
+      });
+    </script>
+  </body>
+</html>
